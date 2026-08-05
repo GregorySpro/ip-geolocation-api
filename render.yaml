@@ -2,8 +2,18 @@ services:
   - type: web
     name: ip-geolocation-api
     runtime: python
-    buildCommand: pip install -r requirements.txt
+    buildCommand: |
+      pip install -r requirements.txt
+      if [ -n "$MAXMIND_LICENSE_KEY" ]; then
+        echo "Downloading GeoLite2 database..."
+        curl -sL "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key=${MAXMIND_LICENSE_KEY}&suffix=tar.gz" | tar -xz --wildcards --no-anchored "GeoLite2-City.mmdb" --strip-components=1 -C .
+        echo "Database downloaded successfully."
+      else
+        echo "WARNING: MAXMIND_LICENSE_KEY not set. Database not downloaded."
+      fi
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0
+      - key: MAXMIND_LICENSE_KEY
+        sync: false
