@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IP Geolocation API — Docs</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <style>
+    :root {
+      --accent: #10b981;
+      --accent-light: #34d399;
+      --bg: #0f172a;
+      --surface: #1e293b;
+      --surface2: #1a2e26;
+      --border: #334155;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --green: #34d399;
+      --red: #f87171;
+      --yellow: #fbbf24;
+      --sidebar-width: 260px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); display: flex; min-height: 100vh; }
+
+    aside {
+      width: var(--sidebar-width);
+      position: fixed; top: 0; left: 0; height: 100vh;
+      background: var(--surface); border-right: 1px solid var(--border);
+      display: flex; flex-direction: column; overflow-y: auto; z-index: 10;
+    }
+    .sidebar-logo { padding: 24px 20px 16px; border-bottom: 1px solid var(--border); }
+    .sidebar-logo .badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--accent); color: #fff; font-size: 11px; font-weight: 600;
+      padding: 4px 10px; border-radius: 20px; letter-spacing: .5px; margin-bottom: 10px;
+    }
+    .sidebar-logo h2 { font-size: 16px; font-weight: 700; }
+    .sidebar-logo p { font-size: 12px; color: var(--muted); margin-top: 4px; }
+    nav { padding: 16px 12px; flex: 1; }
+    nav .section-label {
+      font-size: 10px; font-weight: 600; color: var(--muted);
+      letter-spacing: 1px; text-transform: uppercase; padding: 8px 8px 4px;
+    }
+    nav a {
+      display: block; padding: 7px 10px; border-radius: 6px;
+      font-size: 13.5px; color: var(--muted); text-decoration: none; transition: all .15s;
+    }
+    nav a:hover, nav a.active { background: var(--surface2); color: var(--text); }
+    nav a.active { color: var(--accent-light); }
+    .sidebar-footer { padding: 16px 20px; border-top: 1px solid var(--border); font-size: 12px; color: var(--muted); }
+    .sidebar-footer a { color: var(--accent-light); text-decoration: none; }
+
+    main { margin-left: var(--sidebar-width); flex: 1; padding: 48px 64px; max-width: 900px; }
+    h1 { font-size: 36px; font-weight: 700; margin-bottom: 12px; }
+    h1 span { color: var(--accent-light); }
+    .hero-desc { font-size: 17px; color: var(--muted); line-height: 1.6; margin-bottom: 32px; }
+    .hero-badges { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 48px; }
+    .chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; border: 1px solid var(--border); color: var(--muted); }
+    .chip.green { border-color: var(--green); color: var(--green); }
+    .chip.accent { border-color: var(--accent); color: var(--accent-light); }
+
+    section { margin-bottom: 64px; }
+    h2 { font-size: 22px; font-weight: 700; padding-bottom: 12px; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+    h3 { font-size: 16px; font-weight: 600; margin-bottom: 12px; margin-top: 28px; }
+    p { font-size: 14.5px; color: var(--muted); line-height: 1.7; margin-bottom: 12px; }
+
+    .endpoint { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 24px; overflow: hidden; }
+    .endpoint-header { display: flex; align-items: center; gap: 12px; padding: 14px 20px; cursor: pointer; user-select: none; }
+    .method { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 500; padding: 3px 10px; border-radius: 5px; min-width: 52px; text-align: center; }
+    .method.post { background: rgba(99,102,241,.15); color: #818cf8; }
+    .method.get  { background: rgba(52,211,153,.15); color: var(--green); }
+    .endpoint-path { font-family: 'JetBrains Mono', monospace; font-size: 14px; color: var(--text); flex: 1; }
+    .endpoint-desc { font-size: 13px; color: var(--muted); }
+    .endpoint-body { border-top: 1px solid var(--border); padding: 20px; display: none; }
+    .endpoint-body.open { display: block; }
+
+    pre { border-radius: 8px; overflow-x: auto; font-size: 13px; margin: 12px 0; position: relative; }
+    pre code { font-family: 'JetBrains Mono', monospace; }
+    .copy-btn { position: absolute; top: 8px; right: 8px; background: var(--surface2); border: 1px solid var(--border); color: var(--muted); padding: 4px 10px; border-radius: 5px; font-size: 11px; cursor: pointer; transition: all .15s; }
+    .copy-btn:hover { color: var(--text); }
+
+    table { width: 100%; border-collapse: collapse; font-size: 13.5px; margin: 12px 0; }
+    th { text-align: left; padding: 10px 14px; background: var(--surface2); font-weight: 600; font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+    td { padding: 10px 14px; border-top: 1px solid var(--border); vertical-align: top; }
+    td code { font-family: 'JetBrains Mono', monospace; font-size: 12px; background: var(--surface2); padding: 2px 6px; border-radius: 4px; color: var(--accent-light); }
+    .required { color: var(--red); font-size: 11px; }
+    .optional { color: var(--muted); font-size: 11px; }
+
+    .err-code { font-family: 'JetBrains Mono', monospace; font-weight: 600; }
+    .err-400 { color: var(--yellow); }
+    .err-404 { color: var(--red); }
+    .err-429 { color: var(--yellow); }
+    .err-503 { color: var(--red); }
+
+    .info-box { background: rgba(16,185,129,.08); border: 1px solid rgba(16,185,129,.25); border-radius: 8px; padding: 14px 18px; margin: 14px 0; }
+    .info-box p { color: var(--text); margin: 0; }
+    .warning-box { background: rgba(251,191,36,.06); border: 1px solid rgba(251,191,36,.25); border-radius: 8px; padding: 14px 18px; margin: 14px 0; }
+    .warning-box p { color: #fde68a; margin: 0; }
+
+    @media (max-width: 768px) {
+      aside { display: none; }
+      main { margin-left: 0; padding: 24px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<aside>
+  <div class="sidebar-logo">
+    <div class="badge">🌍 API</div>
+    <h2>IP Geolocation API</h2>
+    <p>v1.0.0 — Open Source</p>
+  </div>
+  <nav>
+    <div class="section-label">Getting Started</div>
+    <a href="#overview">Overview</a>
+    <a href="#base-url">Base URL</a>
+    <a href="#authentication">Authentication</a>
+    <a href="#rate-limiting">Rate Limiting</a>
+    <a href="#database">GeoLite2 Database</a>
+
+    <div class="section-label">Endpoints</div>
+    <a href="#geolocate">GET /geolocate/{ip}</a>
+    <a href="#geolocate-me">GET /geolocate/me</a>
+    <a href="#geolocate-batch">POST /geolocate/batch</a>
+    <a href="#country">GET /country/{ip}</a>
+    <a href="#timezone">GET /timezone/{ip}</a>
+    <a href="#health">GET /health</a>
+
+    <div class="section-label">Reference</div>
+    <a href="#errors">Error Codes</a>
+    <a href="#legal">Legal & GDPR</a>
+    <a href="#self-hosting">Self-Hosting</a>
+  </nav>
+  <div class="sidebar-footer">
+    Open source · MIT License<br/>
+    <a href="https://github.com" target="_blank">View on GitHub ↗</a>
+  </div>
+</aside>
+
+<main>
+
+  <section id="overview">
+    <h1>IP Geolocation <span>API</span></h1>
+    <p class="hero-desc">
+      A free, open source REST API to geolocate IPv4 and IPv6 addresses.
+      Returns country, city, timezone, and coordinates — powered by the MaxMind GeoLite2 database, self-hosted with no third-party calls.
+    </p>
+    <div class="hero-badges">
+      <span class="chip green">✓ Free &amp; Open Source</span>
+      <span class="chip green">✓ No API Key Required</span>
+      <span class="chip accent">Self-Hostable</span>
+      <span class="chip">Offline Database</span>
+      <span class="chip">MIT License</span>
+    </div>
+
+    <h2>Overview</h2>
+    <p>The API uses the <strong>MaxMind GeoLite2-City</strong> database, which is bundled with the server. No external call is made at request time — all lookups happen locally, making responses fast and privacy-preserving.</p>
+    <table>
+      <tr><th>Field</th><th>Description</th><th>Example</th></tr>
+      <tr><td><code>country_code</code></td><td>ISO 3166-1 alpha-2 country code</td><td><code>FR</code></td></tr>
+      <tr><td><code>country_name</code></td><td>Full country name</td><td><code>France</code></td></tr>
+      <tr><td><code>continent</code></td><td>Continent name</td><td><code>Europe</code></td></tr>
+      <tr><td><code>city</code></td><td>City name (may be null)</td><td><code>Paris</code></td></tr>
+      <tr><td><code>postal_code</code></td><td>Postal / ZIP code (may be null)</td><td><code>75001</code></td></tr>
+      <tr><td><code>latitude</code></td><td>Approximate latitude</td><td><code>48.8534</code></td></tr>
+      <tr><td><code>longitude</code></td><td>Approximate longitude</td><td><code>2.3488</code></td></tr>
+      <tr><td><code>timezone</code></td><td>IANA timezone identifier</td><td><code>Europe/Paris</code></td></tr>
+      <tr><td><code>accuracy_radius_km</code></td><td>Estimated accuracy in km</td><td><code>50</code></td></tr>
+    </table>
+    <div class="warning-box">
+      <p>⚠️ Geolocation is approximate. City-level accuracy is typical but not guaranteed. Do not use for legal enforcement, precise targeting, or security-critical decisions.</p>
+    </div>
+  </section>
+
+  <section id="base-url">
+    <h2>Base URL</h2>
+    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code class="language-text">https://ip-geolocation-api.onrender.com</code></pre>
+    <p>All responses are <code>application/json</code>. Supports IPv4 and IPv6.</p>
+  </section>
+
+  <section id="authentication">
+    <h2>Authentication</h2>
+    <div class="info-box">
+      <p>🔓 No authentication required. All endpoints are publicly accessible. CORS is enabled for all origins.</p>
+    </div>
+  </section>
+
+  <section id="rate-limiting">
+    <h2>Rate Limiting</h2>
+    <table>
+      <tr><th>Endpoint</th><th>Limit</th></tr>
+      <tr><td><code>GET /geolocate/{ip}</code></td><td>60 requests / minute per IP</td></tr>
+      <tr><td><code>GET /geolocate/me</code></td><td>60 requests / minute per IP</td></tr>
+      <tr><td><code>POST /geolocate/batch</code></td><td>10 requests / minute per IP</td></tr>
+      <tr><td><code>GET /country/{ip}</code></td><td>120 requests / minute per IP</td></tr>
+      <tr><td><code>GET /timezone/{ip}</code></td><td>120 requests / minute per IP</td></tr>
+    </table>
+    <p>Exceeded limits return <code>HTTP 429</code> with a <code>Retry-After</code> header.</p>
+  </section>
+
+  <section id="database">
+    <h2>GeoLite2 Database</h2>
+    <p>This API uses the <strong>MaxMind GeoLite2-City</strong> database, available for free under the Creative Commons Attribution-ShareAlike 4.0 license.</p>
+    <p>The database is updated by MaxMind every Tuesday. For self-hosted instances, we recommend scheduling a weekly update.</p>
+    <div class="info-box">
+      <p>📦 The <code>.mmdb</code> database file is not included in the repository (it's in <code>.gitignore</code>). Download it from <strong>dev.maxmind.com</strong> and place it in the project root before starting the server.</p>
+    </div>
+  </section>
+
+  <!-- ENDPOINTS -->
+  <section id="geolocate">
+    <h2>Endpoints</h2>
+    <div class="endpoint">
+      <div class="endpoint-header" onclick="toggle(this)">
+        <span class="method get">GET</span>
+        <span class="endpoint-path">/geolocate/{ip}</span>
+        <span class="endpoint-desc">Full geolocation for an IP address</span>
+      </div>
+      <div class="endpoint-body open">
+        <h3>Path Parameters</h3>
+        <table>
+          <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
+          <tr><td><code>ip</code></td><td>string</td><td>IPv4 or IPv6 address to geolocate.</td></tr>
+        </table>
+        <h3>Example Request</h3>
+        <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code class="language-bash">curl https://ip-geolocation-api.onrender.com/geolocate/8.8.8.8</code></pre>
+        <h3>Example Response</h3>
+        <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code class="language-json">{
+  "ip": "8.8.8.8",
+  "country_code": "US",
+  "country_name": "United States",
+  "continent": "North America",
+  "city": "Mountain View",
+  "postal_code": "94043",
+  "latitude": 37.386,
+  "longitude": -122.0838,
+  "timezone": "America/Los_Angeles",
+  "accuracy_radius_km": 1000
+}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <section id="geolocate-me">
+    <div class="endpoint">
+      <div class="endpoint-header" onclick="toggle(this)">
+        <span class="method get">GET</span>
+        <span class="endpoint-path">/geolocate/me</span>
+        <span class="endpoint-desc">Geolocate the caller's IP address</span>
+      </div>
+      <div class="endpoint-body open">
+        <p>Detects the IP from the <code>X-Forwarded-For</code> header (set by Render's proxy) or the direct connection IP. Returns the same schema as <code>/geolocate/{ip}</code>.</p>
+        <h3>Example Request</h3>
+        <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code class="language-bash">curl https://ip-geolocation-api.onrender.com/geolocate/me</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <section id="geolocate-batch">
+    <div class="endpoint">
+      <div class="endpoint-header" onclick="toggle(this)">
+        <span class="method post">POST</span>
+        <span class="endpoint-path">/geolocate/batch</span>
+        <span class="endpoint-desc">Geolocate up to 10 IPs at once</span>
+      </div>
+      <div class="endpoint-body open">
+        <h3>Request Body</h3>
+        <table>
+          <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+          <tr><td><code>ips</code></td><td>string[]</td><td><span class="required">required</span></td><td>Array of IP addresses. Max 10.</td></tr>
+        </table>
+        <h3>Example Request</h3>
+        <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code class="language-bash">curl -X POST https://ip-geolocation-api.onrender.com/geolocate/batch \
+  -H "Content-Type: application/json" \
+  -d '{"ips": ["8.8.8.8", "1.1.1.1"]}'</code></pre>
+        <h3>Example Response</h3>
+        <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code class="language-json">{
+  "count": 2,
+  "results": [
+    { "ip": "8.8.8.8", "country_code": "US", "country_name": "United States", "city": "Mountain View", "timezone": "America/Los_Angeles", "..." : "..." },
+    { "ip": "1.1.1.1", "country_code": "AU", "country_name": "Australia", "city": "Sydney", "timezone": "Australia/Sydney", "...": "..." }
+  ]
+}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <section id="country">
+    <div class="endpoint">
+      <div class="endpoint-header" onclick="toggle(this)">
+        <span class="method get">GET</span>
+        <span class="endpoint-path">/country/{ip}</span>
+        <span class="endpoint-desc">Lightweight country-only lookup</span>
+      </div>
+      <div class="endpoint-body open">
+        <p>Faster and lighter than the full geolocation — returns only country and continent data.</p>
+        <h3>Example Request</h3>
+        <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code class="language-bash">curl https://ip-geolocation-api.onrender.com/country/8.8.8.8</code></pre>
+        <h3>Example Response</h3>
+        <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code class="language-json">{
+  "ip": "8.8.8.8",
+  "country_code": "US",
+  "country_name": "United States",
+  "continent": "North America"
+}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <section id="timezone">
+    <div class="endpoint">
+      <div class="endpoint-header" onclick="toggle(this)">
+        <span class="method get">GET</span>
+        <span class="endpoint-path">/timezone/{ip}</span>
+        <span class="endpoint-desc">Get timezone and coordinates for an IP</span>
+      </div>
+      <div class="endpoint-body open">
+        <h3>Example Request</h3>
+        <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code class="language-bash">curl https://ip-geolocation-api.onrender.com/timezone/8.8.8.8</code></pre>
+        <h3>Example Response</h3>
+        <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code class="language-json">{
+  "ip": "8.8.8.8",
+  "timezone": "America/Los_Angeles",
+  "latitude": 37.386,
+  "longitude": -122.0838
+}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <section id="health">
+    <div class="endpoint">
+      <div class="endpoint-header" onclick="toggle(this)">
+        <span class="method get">GET</span>
+        <span class="endpoint-path">/health</span>
+        <span class="endpoint-desc">Health check — also reports database status</span>
+      </div>
+      <div class="endpoint-body open">
+        <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code class="language-json">{ "status": "ok", "database": "available" }</code></pre>
+        <p>Returns <code>"database": "missing"</code> if the <code>.mmdb</code> file is not present.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="errors">
+    <h2>Error Codes</h2>
+    <table>
+      <tr><th>Code</th><th>Meaning</th><th>Common Cause</th></tr>
+      <tr><td><span class="err-code err-400">400</span></td><td>Bad Request</td><td>Invalid IP address format, batch exceeds 10 items.</td></tr>
+      <tr><td><span class="err-code err-404">404</span></td><td>Not Found</td><td>IP address not found in the database (private ranges, unallocated blocks).</td></tr>
+      <tr><td><span class="err-code err-429">429</span></td><td>Too Many Requests</td><td>Rate limit exceeded.</td></tr>
+      <tr><td><span class="err-code err-503">503</span></td><td>Service Unavailable</td><td>GeoLite2 database file is missing from the server.</td></tr>
+    </table>
+    <h3>Error Response Format</h3>
+    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code class="language-json">{ "detail": "No data found for IP: 192.168.1.1" }</code></pre>
+    <div class="info-box">
+      <p>💡 Private IP ranges (10.x.x.x, 192.168.x.x, 127.x.x.x) will return a 404 — they are not in the geolocation database by design.</p>
+    </div>
+  </section>
+
+  <section id="legal">
+    <h2>Legal &amp; GDPR</h2>
+    <h3>Data Retention</h3>
+    <p>No IP addresses are stored, logged, or shared. All lookups are performed in memory and discarded immediately after the response is sent.</p>
+    <h3>GDPR Compliance</h3>
+    <p>IP addresses are considered personal data under GDPR in the EU. This API does not persist IP data, functioning as a pure real-time processing tool. Integrators must ensure they have a lawful basis for processing IP addresses collected from their own users (e.g. legitimate interest, consent).</p>
+    <h3>GeoLite2 Database License</h3>
+    <p>The GeoLite2 data is provided by MaxMind under the <strong>Creative Commons Attribution-ShareAlike 4.0</strong> license. When self-hosting, you must comply with MaxMind's End User License Agreement and provide attribution in your application.</p>
+    <p>Attribution example: <em>"This product includes GeoLite2 data created by MaxMind, available from <a href="https://www.maxmind.com" target="_blank" style="color: var(--accent-light);">maxmind.com</a>."</em></p>
+    <h3>Accuracy Disclaimer</h3>
+    <p>Geolocation data is approximate. Do not use this API for legal enforcement, fraud detection as a sole signal, or any context where precise location is required.</p>
+    <h3>Acceptable Use</h3>
+    <p>Must not be used to track, profile, or surveil individuals without their consent. Bulk scraping or building derivative geolocation databases from the API output is prohibited under MaxMind's terms.</p>
+    <h3>License</h3>
+    <p>API source code is released under the <strong>MIT License</strong>.</p>
+  </section>
+
+  <section id="self-hosting">
+    <h2>Self-Hosting</h2>
+    <h3>1. Get the GeoLite2 database</h3>
+    <p>Create a free account at <code>dev.maxmind.com</code>, download <code>GeoLite2-City.mmdb</code>, and place it in the project root.</p>
+    <h3>2. Run locally</h3>
+    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code class="language-bash">git clone https://github.com/your-username/ip-geolocation-api
+cd ip-geolocation-api
+pip install -r requirements.txt
+# Place GeoLite2-City.mmdb in this directory
+uvicorn main:app --reload</code></pre>
+    <h3>3. Keep the database up to date</h3>
+    <p>MaxMind updates GeoLite2 every Tuesday. Use their <strong>GeoIP Update</strong> tool or a weekly cron job to refresh the file.</p>
+    <h3>Deploy on Render</h3>
+    <p>Add a <strong>Persistent Disk</strong> (free tier: 1GB) mounted at <code>/opt/render/project/src/</code> and upload <code>GeoLite2-City.mmdb</code> via Render's shell. The <code>render.yaml</code> handles the rest.</p>
+  </section>
+
+</main>
+
+<script>
+  hljs.highlightAll();
+  function toggle(h) { h.nextElementSibling.classList.toggle('open'); }
+  function copyCode(btn) {
+    navigator.clipboard.writeText(btn.nextElementSibling.innerText).then(() => {
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = 'Copy', 1500);
+    });
+  }
+  const sections = document.querySelectorAll('section[id]');
+  const links = document.querySelectorAll('nav a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) current = s.id; });
+    links.forEach(a => {
+      a.classList.remove('active');
+      if (a.getAttribute('href') === '#' + current) a.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
