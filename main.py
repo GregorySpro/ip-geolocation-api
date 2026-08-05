@@ -96,7 +96,7 @@ def geolocate_batch(body: BatchRequest):
 def get_country(ip: str):
     with get_reader() as reader:
         try:
-            record = reader.country(ip)
+            record = reader.city(ip)
             return {
                 "ip": ip,
                 "country_code": record.country.iso_code,
