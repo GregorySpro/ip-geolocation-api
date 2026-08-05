@@ -138,7 +138,7 @@
   </nav>
   <div class="sidebar-footer">
     Open source · MIT License<br/>
-    <a href="https://github.com" target="_blank">View on GitHub ↗</a>
+    <a href="https://github.com/GregorySpro/ip-geolocation-api" target="_blank">View on GitHub ↗</a>
   </div>
 </aside>
 
@@ -179,7 +179,7 @@
 
   <section id="base-url">
     <h2>Base URL</h2>
-    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code class="language-text">https://ip-geolocation-api.onrender.com</code></pre>
+    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code class="language-text">https://ip-geolocation-api-31u6.onrender.com</code></pre>
     <p>All responses are <code>application/json</code>. Supports IPv4 and IPv6.</p>
   </section>
 
@@ -228,7 +228,7 @@
           <tr><td><code>ip</code></td><td>string</td><td>IPv4 or IPv6 address to geolocate.</td></tr>
         </table>
         <h3>Example Request</h3>
-        <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code class="language-bash">curl https://ip-geolocation-api.onrender.com/geolocate/8.8.8.8</code></pre>
+        <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code class="language-bash">curl https://ip-geolocation-api-31u6.onrender.com/geolocate/8.8.8.8</code></pre>
         <h3>Example Response</h3>
         <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code class="language-json">{
   "ip": "8.8.8.8",
@@ -256,7 +256,7 @@
       <div class="endpoint-body open">
         <p>Detects the IP from the <code>X-Forwarded-For</code> header (set by Render's proxy) or the direct connection IP. Returns the same schema as <code>/geolocate/{ip}</code>.</p>
         <h3>Example Request</h3>
-        <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code class="language-bash">curl https://ip-geolocation-api.onrender.com/geolocate/me</code></pre>
+        <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code class="language-bash">curl https://ip-geolocation-api-31u6.onrender.com/geolocate/me</code></pre>
       </div>
     </div>
   </section>
@@ -275,7 +275,7 @@
           <tr><td><code>ips</code></td><td>string[]</td><td><span class="required">required</span></td><td>Array of IP addresses. Max 10.</td></tr>
         </table>
         <h3>Example Request</h3>
-        <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code class="language-bash">curl -X POST https://ip-geolocation-api.onrender.com/geolocate/batch \
+        <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code class="language-bash">curl -X POST https://ip-geolocation-api-31u6.onrender.com/geolocate/batch \
   -H "Content-Type: application/json" \
   -d '{"ips": ["8.8.8.8", "1.1.1.1"]}'</code></pre>
         <h3>Example Response</h3>
@@ -300,7 +300,7 @@
       <div class="endpoint-body open">
         <p>Faster and lighter than the full geolocation — returns only country and continent data.</p>
         <h3>Example Request</h3>
-        <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code class="language-bash">curl https://ip-geolocation-api.onrender.com/country/8.8.8.8</code></pre>
+        <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code class="language-bash">curl https://ip-geolocation-api-31u6.onrender.com/country/8.8.8.8</code></pre>
         <h3>Example Response</h3>
         <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code class="language-json">{
   "ip": "8.8.8.8",
@@ -321,7 +321,7 @@
       </div>
       <div class="endpoint-body open">
         <h3>Example Request</h3>
-        <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code class="language-bash">curl https://ip-geolocation-api.onrender.com/timezone/8.8.8.8</code></pre>
+        <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code class="language-bash">curl https://ip-geolocation-api-31u6.onrender.com/timezone/8.8.8.8</code></pre>
         <h3>Example Response</h3>
         <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code class="language-json">{
   "ip": "8.8.8.8",
