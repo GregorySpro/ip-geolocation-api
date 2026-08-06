@@ -7,5 +7,7 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0
+      - key: API_BASE_URL
+        value: https://ip-geolocation-api-31u6.onrender.com
       - key: MAXMIND_LICENSE_KEY
         sync: false

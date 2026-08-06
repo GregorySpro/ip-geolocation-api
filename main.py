@@ -1,3 +1,4 @@
+import os
 import geoip2.database
 import geoip2.errors
 from pathlib import Path
@@ -5,9 +6,13 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
+_base_url = os.getenv("API_BASE_URL", "")
+_servers = [{"url": _base_url}] if _base_url else None
+
 app = FastAPI(
     title="IP Geolocation API",
     description="Open source IP geolocation API using MaxMind GeoLite2 database.",
+    servers=_servers,
     version="1.0.0",
 )
 
