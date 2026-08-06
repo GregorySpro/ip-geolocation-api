@@ -181,6 +181,9 @@
     <h2>Base URL</h2>
     <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code class="language-text">https://ip-geolocation-api-31u6.onrender.com</code></pre>
     <p>All responses are <code>application/json</code>. Supports IPv4 and IPv6.</p>
+    <div class="warning-box">
+      <p>⚠️ The public instance runs on Render's free tier and may spin down after inactivity. The first request after a cold start can take up to 60 seconds (the database is also downloaded at startup) — subsequent requests are fast.</p>
+    </div>
   </section>
 
   <section id="authentication">
@@ -352,6 +355,7 @@
     <table>
       <tr><th>Code</th><th>Meaning</th><th>Common Cause</th></tr>
       <tr><td><span class="err-code err-400">400</span></td><td>Bad Request</td><td>Invalid IP address format, batch exceeds 10 items.</td></tr>
+      <tr><td><span class="err-code err-400">422</span></td><td>Unprocessable Entity</td><td>POST body is not valid JSON or missing <code>Content-Type: application/json</code> header (affects <code>POST /geolocate/batch</code>).</td></tr>
       <tr><td><span class="err-code err-404">404</span></td><td>Not Found</td><td>IP address not found in the database (private ranges, unallocated blocks).</td></tr>
       <tr><td><span class="err-code err-429">429</span></td><td>Too Many Requests</td><td>Rate limit exceeded.</td></tr>
       <tr><td><span class="err-code err-503">503</span></td><td>Service Unavailable</td><td>GeoLite2 database file is missing from the server.</td></tr>
@@ -385,7 +389,7 @@
     <h3>1. Get the GeoLite2 database</h3>
     <p>Create a free account at <code>dev.maxmind.com</code>, download <code>GeoLite2-City.mmdb</code>, and place it in the project root.</p>
     <h3>2. Run locally</h3>
-    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code class="language-bash">git clone https://github.com/your-username/ip-geolocation-api
+    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code class="language-bash">git clone https://github.com/GregorySpro/ip-geolocation-api
 cd ip-geolocation-api
 pip install -r requirements.txt
 # Place GeoLite2-City.mmdb in this directory
@@ -393,7 +397,7 @@ uvicorn main:app --reload</code></pre>
     <h3>3. Keep the database up to date</h3>
     <p>MaxMind updates GeoLite2 every Tuesday. Use their <strong>GeoIP Update</strong> tool or a weekly cron job to refresh the file.</p>
     <h3>Deploy on Render</h3>
-    <p>Add a <strong>Persistent Disk</strong> (free tier: 1GB) mounted at <code>/opt/render/project/src/</code> and upload <code>GeoLite2-City.mmdb</code> via Render's shell. The <code>render.yaml</code> handles the rest.</p>
+    <p>The repo includes a <code>start.sh</code> script that automatically downloads the GeoLite2-City database from MaxMind at startup using your license key. Set the <code>MAXMIND_LICENSE_KEY</code> environment variable in your Render service, then set the Start Command to <code>bash start.sh</code>. The <code>render.yaml</code> handles the rest.</p>
   </section>
 
 </main>
