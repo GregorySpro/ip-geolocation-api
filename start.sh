@@ -20,4 +20,4 @@ else
   echo "Database already present: $(du -h $DB_FILE | cut -f1)"
 fi
 
-exec uvicorn main:app --host 0.0.0.0 --port "${PORT:-8000}"
+exec uvicorn main:app --host 0.0.0.0 --port "${PORT:-8000}" --proxy-headers --forwarded-allow-ips='*'
